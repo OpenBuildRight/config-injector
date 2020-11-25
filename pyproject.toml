@@ -1,14 +1,13 @@
 [tool.poetry]
 name = "config-injector"
-version = "0.1.0"
+version = "0.1.1"
 description = "Simple dependency injection framework for python for easy and logical app configuration."
 authors = ["DustinMoriarty <dustin.moriarty@protonmail.com>"]
 readme = "README.md"
-url = "https://github.com/DustinMoriarty/config-injector"
 homepage = "https://github.com/DustinMoriarty/config-injector"
 repository = "https://github.com/DustinMoriarty/config-injector"
 documentation = "https://github.com/DustinMoriarty/config-injector"
-liscense = "MIT"
+license = "MIT"
 
 
 [tool.poetry.dependencies]
