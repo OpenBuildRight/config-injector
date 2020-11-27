@@ -66,7 +66,7 @@ class Config(SupportsFill):
             type_map = {get_type(x): x for x in _arg_tp}
         except TypeError:
             type_map = None
-        if type_map :
+        if type_map:
             # Handle "oneOf" types defined with a type property.
             try:
                 type_name = arg.pop("type")
