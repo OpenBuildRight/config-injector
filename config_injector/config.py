@@ -1,24 +1,33 @@
 from abc import ABC
-from typing import (Any, Callable, Dict, List, SupportsFloat, SupportsInt,
-                    Text, Tuple, Union)
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import SupportsFloat
+from typing import SupportsInt
+from typing import Text
+from typing import Tuple
+from typing import Union
 
-from config_injector.config.exc import (DoesNotSupportBuild,
-                                        InvalidConfigValue, KeyNotInConfig,
-                                        TypeNotDefined)
-from config_injector.config.utils import get_type
+from config_injector.exc import DoesNotSupportBuild
+from config_injector.exc import InvalidConfigValue
+from config_injector.exc import KeyNotInConfig
+from config_injector.exc import TypeNotDefined
+from config_injector.utils import get_type
+
 
 JsonTypes = Union[Dict, List, bool, SupportsInt, SupportsFloat, Text]
 ComponentCallable = Union[Any, Tuple[Any]]
 
 
-class SupportsBuild(ABC):
-    def __build__(self, **kwargs: Dict):
+class SupportsFill(ABC):
+    def __fill__(self, **kwargs: Dict):
         ...
 
 
-def build(f: SupportsBuild, config: Dict) -> Any:
+def fill(f: SupportsFill, context: Dict) -> Any:
     try:
-        return f.__build__(**config)
+        return f.__fill__(**context)
     except AttributeError as e:
         if not hasattr(f, "__build__"):
             raise DoesNotSupportBuild(f"{f} does not support build.", e)
@@ -26,7 +35,7 @@ def build(f: SupportsBuild, config: Dict) -> Any:
             raise e
 
 
-class Config(SupportsBuild):
+class Config(SupportsFill):
     def __init__(self, callback: Callable, **arg_callables: ComponentCallable):
         """
         A configurable component containing hints for json parsing.
@@ -74,7 +83,7 @@ class Config(SupportsBuild):
             arg_tp = _arg_tp
         return arg_tp
 
-    def __build__(self, **kwargs: JsonTypes) -> Any:
+    def __fill__(self, **kwargs: JsonTypes) -> Any:
         """
         Cast data from parsed json prior to calling the callback.
 
@@ -86,7 +95,7 @@ class Config(SupportsBuild):
             arg_tp = self.get_arg_type(arg_name, arg)
             if arg_name in self.arg_callables:
                 if hasattr(arg, "items") and hasattr(arg_tp, "__build__"):
-                    arg_cast = build(arg_tp, arg)
+                    arg_cast = fill(arg_tp, arg)
                 else:
                     arg_cast = arg_tp(arg)
             else:
@@ -101,11 +110,10 @@ def config(**arg_callables: ComponentCallable) -> Callable[[], Config]:
 
     :param key: The key to use for the configuration.
     :param kwargs: The type for each argument in the function f.
-    :return:
+    :return: Wrapper
     """
 
     def wrapper(f) -> Config:
-        _key = get_type(f)
         component = Config(f, **arg_callables)
         return component
 

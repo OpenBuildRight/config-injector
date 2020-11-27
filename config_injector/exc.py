@@ -28,3 +28,7 @@ class InvalidConfigValue(ConfigError):
 
 class DoesNotSupportBuild(ConfigError):
     ...
+
+
+class FileTypeNotRecognized(ConfigError):
+    ...

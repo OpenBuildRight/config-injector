@@ -2,7 +2,8 @@ from collections import namedtuple
 
 import pytest
 
-from config_injector.config.config import build, config
+from config_injector.config import config
+from config_injector.config import fill
 
 
 class DictEq:
@@ -86,4 +87,4 @@ class MockThing4(EqVarMixin):
     ],
 )
 def test_foo(f, config, expected):
-    assert expected == build(f, config)
+    assert expected == fill(f, config)
