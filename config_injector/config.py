@@ -58,12 +58,15 @@ class Config(SupportsFill):
             raise AttributeError(f"{self.callback} has no attribute {__name__}")
 
     def get_arg_type(self, arg_name, arg):
-        _arg_tp = self.arg_callables[arg_name]
+        try:
+            _arg_tp = self.arg_callables[arg_name]
+        except KeyError as e:
+            raise e
         try:
             type_map = {get_type(x): x for x in _arg_tp}
         except TypeError:
             type_map = None
-        if type_map:
+        if type_map :
             # Handle "oneOf" types defined with a type property.
             try:
                 type_name = arg.pop("type")
@@ -94,7 +97,7 @@ class Config(SupportsFill):
         for arg_name, arg in kwargs.items():
             arg_tp = self.get_arg_type(arg_name, arg)
             if arg_name in self.arg_callables:
-                if hasattr(arg, "items") and hasattr(arg_tp, "__build__"):
+                if hasattr(arg, "items") and hasattr(arg_tp, "__fill__"):
                     arg_cast = fill(arg_tp, arg)
                 else:
                     arg_cast = arg_tp(arg)
