@@ -1,8 +1,0 @@
-app:
-  controller:
-    host:
-      url: sqlite://magic
-      database_name: beans
-      port: 8080
-    option_1: "selection_a"
-    option_2: 1
