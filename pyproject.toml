@@ -37,7 +37,6 @@ lines_between_types = 1
 use_parentheses = true
 src_paths = ["config_injector", "tests"]
 filter_files = true
-known_first_party = "poetry"
 
 [tool.black]
 line-length = 88
