@@ -9,7 +9,7 @@ from typing import Text
 from typing import Tuple
 from typing import Union
 
-from config_injector.exc import DoesNotSupportBuild
+from config_injector.exc import DoesNotSupportFill
 from config_injector.exc import InvalidConfigValue
 from config_injector.exc import KeyNotInConfig
 from config_injector.exc import TypeNotDefined
@@ -29,8 +29,8 @@ def fill(f: SupportsFill, context: Dict) -> Any:
     try:
         return f.__fill__(**context)
     except AttributeError as e:
-        if not hasattr(f, "__build__"):
-            raise DoesNotSupportBuild(f"{f} does not support build.", e)
+        if not hasattr(f, "__fill__"):
+            raise DoesNotSupportFill(f"{f} does not support fill.", e)
         else:
             raise e
 
