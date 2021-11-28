@@ -53,7 +53,7 @@ Now that the configurable functions are annotated, we can write a configuration 
 
 This configuration file can be loaded in the runtime portion of our implementation using `get_things()` to instantiate the configured objects created by our functions.
 
-## Polymorphism
+### Polymorphism
 It is common to want to determine the implementation at runtime. This can be accomplished by delaring the class of an argument as a tuple of multiple types.
 
 ```python
@@ -65,9 +65,11 @@ class ImplementationA(BaseClass):...
 
 class ImplementationB(BaseClass):...
 
+@config()
 def implementation_a():
     return ImplementationA()
 
+@config()
 def implementation_b():
     return ImplementationB()
 
@@ -77,6 +79,21 @@ def mock_thing(t0):
         "t0": t0
     }
 
+# Instantiate using implementation a.
 mock_thing_using_a = Injector({"t0": {"type": "implementation_a"}}).instantiate(mock_thing)
-mock_thing_using_b = Injector({"t1": {"type": "implementation_b"}}).instantiate(mock_thing)
+# Instantiate using implementation b.
+mock_thing_using_b = Injector({"t0": {"type": "implementation_b"}}).instantiate(mock_thing)
+```
+
+### Environment Variable Interpolation
+Configurations can contain environment variables for any value. Variables shall be placed within braces `${VAR_NAME}` and use only letters and underscores. For example, for the following configuration, the environment variables would be interpolated.
+
+```python
+{
+    "db": {
+         "url": "${DB_URL}",
+         "user": "${DB_USER}",
+         "password": "${DB_PASSWORD}",
+    }
+}
 ```
