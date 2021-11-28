@@ -1,3 +1,5 @@
+import os
+
 from collections import namedtuple
 from typing import Text
 
@@ -55,3 +57,24 @@ def test_injector_inject_nested(injector):
     assert injector["things"]["t0"]["arg_1"] == things[0].arg_1
     assert injector["things"]["t1"]["arg_5"] == things[1].arg_5
     assert injector["things"]["arg_9"] == things[2]
+
+
+@pytest.fixture()
+def env_var_arg_1():
+    return "a"
+
+
+@pytest.fixture()
+def context_env_var(env_var_arg_1):
+    os.environ["${ARG_1}"] = env_var_arg_1
+    return {"arg_1": env_var_arg_1, "arg_2": "b", "arg_3": "c", "arg_4": "d"}
+
+
+@pytest.fixture()
+def injector_env_var(context_env_var):
+    return Injector(context_env_var)
+
+
+def test_injector_inject_env_var(injector_env_var, env_var_arg_1):
+    thing_0: MockThing0 = injector_env_var.instantiate(mock_thing_0)
+    assert thing_0.arg_1 == env_var_arg_1
