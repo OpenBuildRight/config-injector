@@ -49,6 +49,7 @@ class MockThing3(EqVarMixin):
         self.owner = owner
 
 
+# Polymorphism.
 @config(pets=(MockThing1, MockThing2))
 class MockThing4(EqVarMixin):
     def __init__(self, pets):

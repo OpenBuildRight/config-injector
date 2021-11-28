@@ -11,11 +11,15 @@ import yaml
 from config_injector.config import SupportsFill
 from config_injector.config import fill
 from config_injector.exc import FileTypeNotRecognized
+from config_injector.utils import EnvFiller
 
 
 class Injector(MutableMapping):
-    def __init__(self, context: Dict = None):
-        self.context = {} if context is None else context
+    def __init__(self, context: Dict = None, fill_env=True):
+        self.context = {}
+        self.fill_env = fill_env
+        self._env_filler = EnvFiller()
+        self.load(context)
 
     def __getitem__(self, k: Text):
         v = self.context[k]
@@ -40,7 +44,8 @@ class Injector(MutableMapping):
         self.context = {}
 
     def load(self, context: Dict):
-        self.context.update(context)
+        _context = self._env_filler(context)
+        self.context.update(_context)
 
     def load_file(self, file: Path):
         if file.name.lower().endswith(".json"):
