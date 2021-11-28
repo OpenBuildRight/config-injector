@@ -1,3 +1,5 @@
+import os
+
 from collections import namedtuple
 from typing import Text
 
@@ -5,7 +7,6 @@ import pytest
 
 from config_injector import Injector
 from config_injector import config
-import os
 
 
 MockThing0 = namedtuple("MockThing0", ["arg_1", "arg_2", "arg_3", "arg_4"])
@@ -66,9 +67,7 @@ def env_var_arg_1():
 @pytest.fixture()
 def context_env_var(env_var_arg_1):
     os.environ["${ARG_1}"] = env_var_arg_1
-    return {
-            "arg_1": env_var_arg_1, "arg_2": "b", "arg_3": "c", "arg_4": "d"
-    }
+    return {"arg_1": env_var_arg_1, "arg_2": "b", "arg_3": "c", "arg_4": "d"}
 
 
 @pytest.fixture()

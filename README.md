@@ -52,3 +52,31 @@ Now that the configurable functions are annotated, we can write a configuration 
 ```
 
 This configuration file can be loaded in the runtime portion of our implementation using `get_things()` to instantiate the configured objects created by our functions.
+
+## Polymorphism
+It is common to want to determine the implementation at runtime. This can be accomplished by delaring the class of an argument as a tuple of multiple types.
+
+```python
+from config_injector import config, Injector
+
+class BaseClass:...
+
+class ImplementationA(BaseClass):...
+
+class ImplementationB(BaseClass):...
+
+def implementation_a():
+    return ImplementationA()
+
+def implementation_b():
+    return ImplementationB()
+
+@config(t0=(implementation_a, implementation_b))
+def mock_thing(t0):
+    return {
+        "t0": t0
+    }
+
+mock_thing_using_a = Injector({"t0": {"type": "implementation_a"}}).instantiate(mock_thing)
+mock_thing_using_b = Injector({"t1": {"type": "implementation_b"}}).instantiate(mock_thing)
+```

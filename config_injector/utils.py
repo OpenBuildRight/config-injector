@@ -35,7 +35,7 @@ class EnvFiller:
         return str(val)
 
     def __call__(
-            self, o: Union[Dict, List, Text, SupportsInt, SupportsFloat]
+        self, o: Union[Dict, List, Text, SupportsInt, SupportsFloat]
     ) -> Union[Dict, List, Text, SupportsInt, SupportsFloat]:
         if isinstance(o, str):
             return self.env_var_regex.sub(self._get_env, o)
