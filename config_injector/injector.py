@@ -16,10 +16,10 @@ from config_injector.utils import EnvFiller
 
 class Injector(MutableMapping):
     def __init__(self, context: Dict = None, fill_env=True):
-        self.context = {}
+        self.context = {} if context is None else context
         self.fill_env = fill_env
         self._env_filler = EnvFiller()
-        self.load(context)
+        self.load(self.context)
 
     def __getitem__(self, k: Text):
         v = self.context[k]
