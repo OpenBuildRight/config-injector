@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "config-injector"
-version = "0.3.0"
+version = "0.3.1"
 description = "Simple dependency injection framework for python for easy and logical app configuration."
 authors = ["DustinMoriarty <dustin.moriarty@protonmail.com>"]
 readme = "README.md"

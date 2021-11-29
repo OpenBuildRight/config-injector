@@ -44,6 +44,12 @@ def injector(context):
     return Injector(context)
 
 
+def test_injector_init_load(context):
+    injector_late_load = Injector()
+    injector_late_load.load(context)
+    assert Injector(context) == injector_late_load
+
+
 def test_injector_inject(injector):
     thing_1: MockThing1 = injector["things"]["t1"].instantiate(mock_thing_1)
     assert injector["things"]["t1"]["arg_5"] == thing_1.arg_5
